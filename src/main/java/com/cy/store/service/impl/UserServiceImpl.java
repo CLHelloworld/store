@@ -2,8 +2,10 @@ package com.cy.store.service.impl;
 
 import com.cy.store.entity.User;
 import com.cy.store.mapper.UserMapper;
-import com.cy.store.service.UserService;
+import com.cy.store.service.IUserService;
 import com.cy.store.service.ex.InsertException;
+import com.cy.store.service.ex.PasswordNotMatchException;
+import com.cy.store.service.ex.UserNotFoundException;
 import com.cy.store.service.ex.UsernameDuplicatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,7 @@ import java.util.UUID;
 
 /** 會員模組的service實作層 */
 @Service //@Service註解 : 將當前class交給Spring管理
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
@@ -58,6 +60,40 @@ public class UserServiceImpl implements UserService {
             throw new InsertException("在會員註冊過程中出現未知的異常");
         }
 
+    }
+
+    @Override
+    public User login(String username, String password) {
+        // 根據用戶名稱來查詢用戶的數據是否存在,若不存在則拋出異常
+        User result = userMapper.findByUsername(username);
+
+        if (result == null){
+            throw new UserNotFoundException("用戶資料不存在");
+        }
+        // 檢查用戶的密碼是否正確
+        // 1.先得到資料庫中加密之後的密碼
+        String oldPassword = result.getPassword();
+        // 2.和用戶傳過來的密碼進行比較
+        // 2-1. 先獲取加密字串(鹽值):上一次註冊時自動生成的加密字串(鹽值)
+        String salt = result.getSalt();
+        // 2-2. 將用戶傳過來的密碼按照相同的md5算法規則進行加密
+        String newMD5Password = getMD5Password(password,salt);
+        // 3. 將密碼進行比較
+        if (!newMD5Password.equals(oldPassword)){
+            throw new PasswordNotMatchException("用戶密碼不正確");
+        }
+        // 判斷id_delete(狀態欄位)的值是否為1表示狀態為刪除
+        if(result.getIsDelete() == 1){
+            throw new UserNotFoundException("用戶資料不存在");
+        }
+        //將部分資料傳給前端不需要傳整包,提升效能也能提升安全性
+        User user = new User();
+        user.setUid(result.getUid());
+        user.setUsername(result.getUsername());
+        user.setAvatar(result.getAvatar());
+
+        //將當前用戶的資料返回,為了輔助其他頁面做展示使用(uid,username,avater(大頭貼))
+        return user;
     }
 
     /** 定義一個mp5的加密處理 */

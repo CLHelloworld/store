@@ -1,45 +1,53 @@
 package com.cy.store.controller;
 
 import com.cy.store.entity.User;
-import com.cy.store.service.UserService;
-import com.cy.store.service.ex.InsertException;
-import com.cy.store.service.ex.UsernameDuplicatedException;
+import com.cy.store.service.IUserService;
 import com.cy.store.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 @RestController //@Controller + @ResponseBody
 @RequestMapping("users")
 public class UserController extends BaseController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
+    /** ===約定大於配置 : 開發思想來完成,省略大量的配置甚至註解的編寫===
+     *
+     * 1.接收數據的方式:請求處理方法的參數列表設置為pojo類型(物件)來接收前端的數據
+     *   SpringBoot會將前端的url地址中的參數和pojo類型(物件)的屬性(變數)名進行比較,如果
+     *   這兩個名稱相同,則將值注入到pojo類中對應的屬性(變數)
+     * */
     @RequestMapping("reg")
     public JsonResult<Void> reg(User user) {
         userService.reg(user);
         return new JsonResult<>(OK);
     }
 
-    /*   //使用統一處理取代
-    @RequestMapping("reg")
-    public JsonResult<Void> reg(User user) {
-        //創建響應結果對象
-        JsonResult<Void> result = new JsonResult<>();
-        try {
-            userService.reg(user);
-            result.setState(200);
-            result.setMessage("會員註冊成功");
-        } catch (UsernameDuplicatedException e) {
-            result.setState(4000);
-            result.setMessage("會員名稱被占用");
-        } catch (InsertException e) {
-            result.setState(5000);
-            result.setMessage("註冊時產生未知的異常");
-        }
-        return result;
+    /**
+     * 2.接收數據的方式:請求處理方法的參數列表設置為非pojo(物件)類型
+     *   SpringBoot會直接將請求的參數名和方法的參數名直接進行比較,若名稱相同
+     *   則自動完成值得依賴注入
+     * */
+    @RequestMapping("login")
+    //前端發送請求過來,進入login方法做了一個查詢的動作,把結果放到data返回給前端
+    public JsonResult<User> login(String username,
+                                  String password,
+                                  HttpSession session) {
+        User data = userService.login(username, password);
+        //session物件中數據的綁定(session為全局的)
+        session.setAttribute("uid",data.getUid());
+        session.setAttribute("username",data.getUsername());
+
+        //獲取session中榜定的數據
+        System.out.println(getuidFromSession(session));
+        System.out.println(getUsernameFromSession(session));
+
+        return new JsonResult<User>(OK, data);
     }
-    */
 }
 

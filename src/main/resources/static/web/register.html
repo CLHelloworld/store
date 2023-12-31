@@ -137,5 +137,37 @@
     </div>
 </footer>
 <!--footer結束-->
+<script type="text/javascript">
+    //1.監聽註冊按鈕是否被點擊
+    $("#btn-reg").click(function () {
+        //2.發送ajax()的請求來完成用戶的註冊功能
+        $.ajax({
+            url: "/users/reg",
+            // 設定HTTP請求的類型為POST
+            type: "POST",
+            /* serialize()
+             * 將表單元素轉換成字串，格式如下：
+             * username=用戶輸入帳號&password=用戶輸入密碼
+             */
+            // 將id為form-reg的表單元素的數據序列化，作為請求發送的數據
+            data: $("#form-reg").serialize(),
+            // 指定期望的回應數據類型為JSON
+            dataType: "JSON",
+            success: function (json) {
+                // 當請求成功時執行的函數
+                if(json.state == 200){
+                    alert("註冊成功");
+                }else {
+                    alert("註冊失敗")
+                }
+            },
+            error:function (xhr) {
+                // 當請求失敗時執行的函數
+                alert("註冊時發生未知的錯誤! "+ xhr.status)
+            }
+        })
+    });
+
+</script>
 </body>
 </html>

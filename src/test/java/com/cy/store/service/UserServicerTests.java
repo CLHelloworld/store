@@ -1,7 +1,6 @@
 package com.cy.store.service;
 
 import com.cy.store.entity.User;
-import com.cy.store.mapper.UserMapper;
 import com.cy.store.service.ex.ServiceException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class UserServicerTests {
     // idea檢測到介面不能被創建實體(動態代理技術來解決)
     @Autowired
-    private UserService userService;
+    private IUserService userService;
     /**
      * 單元測試方法 : 可以單獨運行,不用啟動整個專案
      * 1.必須標註@Test註解
@@ -24,8 +23,8 @@ public class UserServicerTests {
      * 3.方法的參數列表不指定任何類型
      * 4.方法的訪問修飾字必須是public
      */
+    // 標記這是一個測試方法
     @Test
-// 標記這是一個測試方法
 // 定義了一個名為reg的公開測試方法
     public void reg(){
         try {
@@ -43,10 +42,16 @@ public class UserServicerTests {
         } catch (ServiceException e) {
             // 印出異常類型的簡單名稱
             System.out.println(e.getClass().getSimpleName());
-            // 印出異常的消息
+            // 印出異常的訊息
             System.out.println(e.getMessage());
 
         }
+    }
+    @Test
+    public void login(){
+        User user =
+                userService.login("test001","123");
+        System.out.println(user);
     }
 
 }
