@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <!--namespace 設定當前映射文件和哪個街口進行映射,需要指定街口的文件路徑 -->
+<mapper namespace="com.cy.store.mapper.UserMapper">
+    <!-- 自定義映射規則 : resultMap標籤來完成映射規則的定義-->
+    <!-- id屬性 : 給這個映射分配為一個id值,定硬的就是resultMap="id屬性的值"屬性的取值
+        type屬性 : 取值是一個類,表示資料庫中查詢結果與Java中哪個實體類進行映射
+    -->
+    <resultMap id="UserEntityMap" type="com.cy.store.entity.User">
+    <!-- 將表格和類的屬性不一致的字段進行對應,名稱一致可以不用寫-->
+        <!--
+            column屬性:表示資料庫表格中的表格名稱
+            property屬性:表示對應到的變數名稱
+        -->
+        <!-- 定義映射規則時主鍵不可省略-->
+        <id column="uid" property="uid"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_user" property="modifiedUser"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <!-- id屬性:映射接口中方法的名稱,直接在標籤的內容來寫sql語法 -->
+    <!--
+    useGeneratedKeys屬性 : 表示開啟某個變數的值遞增(主鍵設置為遞增)
+    keyProperty屬性 : 標籤將VO中的哪個變數作為主鍵
+    -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="uid">
+    INSERT INTO t_user(username,password,salt,phone,email,gender,avatar,is_delete,
+                       created_user,created_time, modified_user, modified_time
+    )VALUES (
+        #{username},#{password},#{salt},#{phone},#{email},#{gender},#{avatar},#{isDelete},
+        #{createdUser},#{createdTime},#{modifiedUser},#{modifiedTime}
+        )
+    </insert>
+    <!-- select語句在執行時,查詢結果是一個對象,多個對象 -->
+    <!--
+        resultType : 表示查詢的結果為集合,只需要指定對應映射的類型,並且包含完整的包接口; resultType="com.cy.store.entity.User"
+        resultMap :  標籤當資料庫表格的資源和VO不同時,來自定義查詢結果的映射規則
+    -->
+    <select id="findByUsername" resultMap="UserEntityMap">
+        SELECT * FROM t_user WHERE username = #{username}
+    </select>
+
+</mapper>

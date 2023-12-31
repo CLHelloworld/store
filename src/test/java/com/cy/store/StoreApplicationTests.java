@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 @SpringBootTest
 class StoreApplicationTests {
+
     @Autowired
     private DataSource dataSource;
 
@@ -23,7 +24,7 @@ class StoreApplicationTests {
      * */
 
     @Test
-    void getConnection() throws SQLException {
+    void getConnection() throws Exception {
         System.out.println(dataSource.getConnection());
     }
 
