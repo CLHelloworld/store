@@ -148,8 +148,8 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">电话号码：</label>
                         <div class="col-md-8">
-                            <input `id="phone" name="phone" type="text" class="form-control"
-                                   placeholder="请输入电话号码" value="13311311313">
+                            <input id="phone" name="phone" type="text" class="form-control" placeholder="请输入电话号码"
+                                   value="13311311313">
                         </div>
                     </div>
                     <div class="form-group">
@@ -266,39 +266,64 @@
     </div>
 </footer>
 <!--页脚结束-->
+
 <script type="text/javascript">
-    /**
-     * 一旦檢測到當前頁面被載入就會觸發ready方法
-     * $(document).ready(function(){
-     *     //編寫程式碼
-     * });
-     * */
     $(document).ready(function () {
+        // 發送一個AJAX GET請求到服務器的"/users/get_by_uid"
         $.ajax({
-            url: "/users/get_by_uid", // 設定請求的URL為用戶登錄的接口
-            type: "GET", // 設定請求類型為GET
-            data: $("#form-change-info").serialize(), // 將id為form-change-info的表單數據序列化作為請求發送的數據
-            dataType: "JSON", // 預期服務器返回的數據類型是JSON
+            url: "/users/get_by_uid",   // 請求地址
+            type: "GET",                // 請求方法
+            dataType: "json",           // 預期服務器返回的數據類型
+            // 當請求成功時，執行此回調函數
             success: function (json) {
+                // 如果返回的狀態碼是200，表示成功獲取數據
                 if (json.state == 200) {
-                    //將查詢到的數據重新設置道session中
+                    // 在控制台印出用戶資料
+                    console.log("username=" + json.data.username);
+                    console.log("phone=" + json.data.phone);
+                    console.log("email=" + json.data.email);
+                    console.log("gender=" + json.data.gender);
+                    // 將獲取的資料填充到表單中
                     $("#username").val(json.data.username);
                     $("#phone").val(json.data.phone);
                     $("#email").val(json.data.email);
-                    let radio = json.data.gender == 0 ?
-                        $("#gender-female") : $("#gender-male");
-                    // prop()表示給某個元素添加屬性及屬性的值
+                    // 根據性別選擇對應的單選按鈕並設置為選中狀態
+                    let radio = json.data.gender == 0 ? $("#gender-female") : $("#gender-male");
                     radio.prop("checked", "checked");
                 } else {
-                    alert("用戶數據不存在");
+                    // 如果獲取數據失敗，彈出提示信息
+                    alert("獲取用戶訊息失敗!" + json.message);
+                }
+            }
+        });
+    });
+    // 當點擊id為"btn-change-info"的按鈕時，執行以下函數
+    $("#btn-change-info").click(function () {
+        // 發送一個AJAX POST請求到服務器的"/users/change_info"
+        $.ajax({
+            url: "/users/change_info",                // 請求地址
+            type: "POST",                             // 請求方法
+            data: $("#form-change-info").serialize(), // 將id為"form-change-info"的表單數據序列化為查詢字串
+            dataType: "json",                         // 預期服務器返回的數據類型
+            // 當請求成功時，執行此回調函數
+            success: function (json) {
+                // 如果返回的狀態碼是200，表示資料更新成功
+                if (json.state == 200) {
+                    alert("用戶資料修改成功!");
+                    location.href = "userdata.html";// 更新成功後重新載入當前頁面
+                } else {
+                    // 如果更新失敗，彈出錯誤信息
+                    alert("用戶資料修改失敗!" + json.message);
                 }
             },
+            // 當請求失敗時，執行此回調函數
             error: function (xhr) {
-                // 當請求失敗時執行的函數，參數xhr是XMLHttpRequest對象
-                alert("查詢用戶訊息產生未知的異常" + xhr.message);
+                // 彈出提示信息，告知用戶登錄信息已過期
+                alert("您的登錄已過期,請重新登錄!" + xhr.status);
+                location.href = "login.html";// 跳轉到登錄頁面以便用戶重新登錄
             }
-        })
-    })
+        });
+    });
 </script>
 </body>
 

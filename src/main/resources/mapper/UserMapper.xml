@@ -66,7 +66,7 @@
                  若test的條件為true則執行if標籤內部的語句反之則不執行-->
         <if test="phone != null">phone = #{phone},</if><!--結束標籤要放在逗號之後-->
         <if test="email != null">email = #{email},</if>
-        <if test="email != null">gender = #{gender},</if>
+        <if test="gender != null">gender = #{gender},</if>
         modified_user=#{modifiedUser},
         modified_time=#{modifiedTime}
         WHERE uid = #{uid}

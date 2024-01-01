@@ -126,6 +126,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     //---------------------根據用戶的id查詢用戶的資訊------------------------------
+    @Override
     public User getByUid(Integer uid) {
         // 調用 userMapper 的 findByUid 方法根據 uid 獲取用戶信息
         User result = userMapper.findByUid(uid);
@@ -155,7 +156,6 @@ public class UserServiceImpl implements IUserService {
     public void changeInfo(Integer uid, String username, User user) {
         // 使用 userMapper 的 findByUid 方法根據 uid 查找用戶
         User result = userMapper.findByUid(uid);
-
         // 檢查獲取的用戶是否為 null 或者用戶是否被標記為已刪除（isDelete 等於 1）
         if (result == null || result.getIsDelete() == 1) {
             // 如果用戶不存在或已被標記為刪除，則拋出 UserNotFoundException 異常

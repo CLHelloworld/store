@@ -4,6 +4,7 @@ import com.cy.store.entity.User;
 import com.cy.store.service.IUserService;
 import com.cy.store.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,7 +52,7 @@ public class UserController extends BaseController {
         session.setAttribute("username", data.getUsername());
 
         //獲取session中榜定的數據
-        System.out.println(getuidFromSession(session));
+        System.out.println(getUidFromSession(session));
         System.out.println(getUsernameFromSession(session));
 
         return new JsonResult<User>(OK, data);
@@ -62,16 +63,16 @@ public class UserController extends BaseController {
     public JsonResult<Void> changePassword(String oldPassword,
                                            String newPassword,
                                            HttpSession session) {
-        Integer uid = getuidFromSession(session);
+        Integer uid = getUidFromSession(session);
         String username = getUsernameFromSession(session);
         userService.changePassword(uid, username, oldPassword, newPassword);
         return new JsonResult<>(OK);
     }
 
     //----------------------根據用戶的id查詢用戶的資訊-------------------------
-    @RequestMapping("get_by_uid")
+    @GetMapping("get_by_uid")
     public JsonResult<User> getByUid(HttpSession session) {
-        User data = userService.getByUid(getuidFromSession(session));
+        User data = userService.getByUid(getUidFromSession(session));
         return new JsonResult<>(OK, data);
     }
 
@@ -81,7 +82,7 @@ public class UserController extends BaseController {
                                        HttpSession session) {
         //user物件中有四種數據:username,phone,email,gender
         //uid數據需要再次封裝到user物件中
-        Integer uid = getuidFromSession(session);
+        Integer uid = getUidFromSession(session);
         String username = getUsernameFromSession(session);
         userService.changeInfo(uid, username, user);
         return new JsonResult<>(OK);

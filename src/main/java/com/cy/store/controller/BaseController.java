@@ -63,7 +63,7 @@ public class BaseController {
      * @param session session 物件
      * @return 當前登錄用戶的uid的值
      */
-    protected final Integer getuidFromSession(HttpSession session) {
+    protected final Integer getUidFromSession(HttpSession session) {
         return Integer.valueOf(session.getAttribute("uid")
                 .toString());
     }

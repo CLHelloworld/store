@@ -12,7 +12,7 @@ public class JsonResult<E> implements Serializable {
     /** 描述訊息 */
     private String message;
     /** 任何數據類型 */
-    private E date;
+    private E data;
 
     public JsonResult() {
     }
@@ -24,9 +24,9 @@ public class JsonResult<E> implements Serializable {
         this.message = e.getMessage();
     }
     //狀態碼加上異常
-    public JsonResult(Integer state, E date) {
+    public JsonResult(Integer state, E data) {
         this.state = state;
-        this.date = date;
+        this.data = data;
     }
 
     public Integer getState() {
@@ -45,11 +45,10 @@ public class JsonResult<E> implements Serializable {
         this.message = message;
     }
 
-    public E getDate() {
-        return date;
+    public E getData() {
+        return data;
     }
-
-    public void setDate(E date) {
-        this.date = date;
+    public void setData(E data) {
+        this.data = data;
     }
 }
