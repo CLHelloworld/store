@@ -9,7 +9,7 @@ public class BaseEntity {
 
     private String createdUser;
     private Date createdTime;
-    private Date modifiedUser;
+    private String modifiedUser;
     private Date modifiedTime;
 
     public String getCreatedUser() {
@@ -28,11 +28,11 @@ public class BaseEntity {
         this.createdTime = createdTime;
     }
 
-    public Date getModifiedUser() {
+    public String getModifiedUser() {
         return modifiedUser;
     }
 
-    public void setModifiedUser(Date modifiedUser) {
+    public void setModifiedUser(String modifiedUser) {
         this.modifiedUser = modifiedUser;
     }
 

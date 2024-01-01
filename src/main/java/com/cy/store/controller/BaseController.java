@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.servlet.http.HttpSession;
 
 /**
- * Controller層的父層
+ * Controller層的父層為了統一處理例外
  */
 public class BaseController {
     /**
