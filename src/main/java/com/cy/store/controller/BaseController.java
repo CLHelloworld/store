@@ -67,6 +67,7 @@ public class BaseController {
         return Integer.valueOf(session.getAttribute("uid")
                 .toString());
     }
+    //--------------------------------------------------------------------
     /**
      * 獲取當前用戶的username
      * @param session session 物件

@@ -16,18 +16,24 @@ public class UserController extends BaseController {
     @Autowired
     private IUserService userService;
 
+
+    // ===約定大於配置 : 開發思想來完成,省略大量的配置甚至註解的編寫===
+
+    //-----------------------------用戶註冊----------------------------
+
     /**
-     * ===約定大於配置 : 開發思想來完成,省略大量的配置甚至註解的編寫===
-     * <p>
      * 1.接收數據的方式:請求處理方法的參數列表設置為pojo類型(物件)來接收前端的數據
      * SpringBoot會將前端的url地址中的參數和pojo類型(物件)的屬性(變數)名進行比較,如果
      * 這兩個名稱相同,則將值注入到pojo類中對應的屬性(變數)
      */
+
     @RequestMapping("reg")
     public JsonResult<Void> reg(User user) {
         userService.reg(user);
         return new JsonResult<>(OK);
     }
+
+    //-----------------------------用戶登錄功能----------------------------
 
     /**
      * 2.接收數據的方式:請求處理方法的參數列表設置為非pojo(物件)類型
@@ -51,6 +57,7 @@ public class UserController extends BaseController {
         return new JsonResult<User>(OK, data);
     }
 
+    //-----------------------------用戶修改密碼----------------------------
     @RequestMapping("change_password")
     public JsonResult<Void> changePassword(String oldPassword,
                                            String newPassword,
@@ -60,5 +67,25 @@ public class UserController extends BaseController {
         userService.changePassword(uid, username, oldPassword, newPassword);
         return new JsonResult<>(OK);
     }
+
+    //----------------------根據用戶的id查詢用戶的資訊-------------------------
+    @RequestMapping("get_by_uid")
+    public JsonResult<User> getByUid(HttpSession session) {
+        User data = userService.getByUid(getuidFromSession(session));
+        return new JsonResult<>(OK, data);
+    }
+
+    //------------------------------更新用戶的資訊-------------------------------
+    @RequestMapping("change_info")
+    public JsonResult<Void> changeInfo(User user,
+                                       HttpSession session) {
+        //user物件中有四種數據:username,phone,email,gender
+        //uid數據需要再次封裝到user物件中
+        Integer uid = getuidFromSession(session);
+        String username = getUsernameFromSession(session);
+        userService.changeInfo(uid, username, user);
+        return new JsonResult<>(OK);
+    }
+
 }
 

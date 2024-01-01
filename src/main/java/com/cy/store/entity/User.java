@@ -1,7 +1,6 @@
 package com.cy.store.entity;
 
 import org.springframework.stereotype.Component;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -18,7 +17,8 @@ public class User extends BaseEntity implements Serializable {
     private String avatar;
     private Integer isDelete;
 
-    /*1.get,set方法
+    /*
+    * 1.get,set方法
     * 2.equals and toString方法
     * */
 

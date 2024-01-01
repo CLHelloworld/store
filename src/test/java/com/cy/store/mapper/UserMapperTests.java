@@ -1,6 +1,8 @@
 package com.cy.store.mapper;
 
 import com.cy.store.entity.User;
+import com.cy.store.service.ex.UpdateException;
+import com.cy.store.service.ex.UserNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ public class UserMapperTests {
      * 3.方法的參數列表不指定任何類型
      * 4.方法的訪問修飾字必須是public
      */
+    //--------------------------測試新增用戶---------------------
     @Test
     public void insert() {
         User user = new User();
@@ -35,21 +38,35 @@ public class UserMapperTests {
 
     }
 
+    //----------------------測試根據Username尋找用戶------------------------------
     @Test
     public void findByUsername() {
         User user = userMapper.findByUsername("tim");
         System.out.println(user);
     }
 
+    //---------------------------測試更換密碼--------------------------
     @Test
     public void updatePasswordByUid() {
 
-        userMapper.updatePasswordByUid(7,"321","管理員",new Date());
+        userMapper.updatePasswordByUid(7, "321", "管理員", new Date());
     }
 
+    //-----------------------測試根據Uid尋找用戶-----------------------------
     @Test
     public void findByUid() {
         System.out.println(userMapper.findByUid(7));
+    }
+
+    //----------------------測試更新用戶數據----------------------------------
+    @Test
+    public void updateInfoByUid() {
+        User user = new User();
+        user.setUid(8);
+        user.setPhone("878787878787");
+        user.setEmail("test002@gmail.com");
+        user.setGender(1);
+        userMapper.updateInfoByUid(user);
     }
 
 }

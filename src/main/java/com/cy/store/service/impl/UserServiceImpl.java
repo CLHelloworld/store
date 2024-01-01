@@ -14,12 +14,14 @@ import java.util.UUID;
 /**
  * 會員模組的service實作層
  */
+
 @Service //@Service註解 : 將當前class交給Spring管理
 public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
 
+    //-------------------------用戶註冊-----------------------------
     @Override
     public void reg(User user) {
         // 通過user參數來獲取傳遞過來的username
@@ -62,6 +64,7 @@ public class UserServiceImpl implements IUserService {
 
     }
 
+    //-------------------------用戶登錄功能--------------------------
     @Override
     public User login(String username, String password) {
         // 根據用戶名稱來查詢用戶的數據是否存在,若不存在則拋出異常
@@ -96,6 +99,7 @@ public class UserServiceImpl implements IUserService {
         return user;
     }
 
+    //-----------------------修改用戶密碼----------------------------
     @Override
     public void changePassword(Integer uid, String username, String oldPassword, String newPassword) {
         // 調用userMapper的findByUid()方法，根據用戶的uid查詢用戶數據
@@ -120,6 +124,60 @@ public class UserServiceImpl implements IUserService {
             throw new UpdateException("更新資料時產生未知的異常");
         }
     }
+
+    //---------------------根據用戶的id查詢用戶的資訊------------------------------
+    public User getByUid(Integer uid) {
+        // 調用 userMapper 的 findByUid 方法根據 uid 獲取用戶信息
+        User result = userMapper.findByUid(uid);
+        // 檢查獲取的用戶信息是否為 null 或者用戶標記為已刪除（isDelete 等於 1）
+        if (result == null || result.getIsDelete() == 1) {
+            // 如果用戶不存在或已被標記為刪除，則拋出 UserNotFoundException 異常
+            throw new UserNotFoundException("用戶數據不存在");
+        }
+        // 創建一個新的 User 對象
+        User user = new User();
+        // 將查詢到的用戶信息複製到新的 User 對象中
+        user.setUsername(result.getUsername()); // 設置用戶名
+        user.setPhone(result.getPhone());       // 設置電話號碼
+        user.setEmail(result.getEmail());       // 設置電子郵箱
+        user.setGender(result.getGender());     // 設置性別
+        // 返回新創建的 User 物件
+        return user;
+    }
+
+    //-----------------------更新用戶的資訊--------------------------
+
+    /**
+     * user物件中的數據只有phone/email/gender,
+     * 手動將uid/username封裝到user物件中
+     */
+    @Override
+    public void changeInfo(Integer uid, String username, User user) {
+        // 使用 userMapper 的 findByUid 方法根據 uid 查找用戶
+        User result = userMapper.findByUid(uid);
+
+        // 檢查獲取的用戶是否為 null 或者用戶是否被標記為已刪除（isDelete 等於 1）
+        if (result == null || result.getIsDelete() == 1) {
+            // 如果用戶不存在或已被標記為刪除，則拋出 UserNotFoundException 異常
+            throw new UserNotFoundException("用戶數據不存在");
+        }
+        // 設置 user 對象的 uid
+        user.setUid(uid);
+        // user.setUsername(username);
+        // 設置修改用戶的用戶名
+        user.setModifiedUser(username);
+        // 設置修改時間為當前時間
+        user.setModifiedTime(new Date());
+        // 調用 userMapper 的 updateInfoByUid 方法更新用戶信息
+        Integer rows = userMapper.updateInfoByUid(user);
+        // 檢查是否正確更新了一條數據
+        if (rows != 1) {
+            // 如果不是一條，則拋出 UpdateException 異常
+            throw new UpdateException("更新數據時發生未知的異常");
+        }
+    }
+
+//--------------------------------------------------------------------
 
     /**
      * 定義一個mp5的加密處理

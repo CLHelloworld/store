@@ -16,6 +16,7 @@ public class UserServicerTests {
     // idea檢測到介面不能被創建實體(動態代理技術來解決)
     @Autowired
     private IUserService userService;
+
     /**
      * 單元測試方法 : 可以單獨運行,不用啟動整個專案
      * 1.必須標註@Test註解
@@ -24,9 +25,9 @@ public class UserServicerTests {
      * 4.方法的訪問修飾字必須是public
      */
     // 標記這是一個測試方法
+    //-------------------------用戶註冊-----------------------------
     @Test
-// 定義了一個名為reg的公開測試方法
-    public void reg(){
+    public void reg() {
         try {
             // 創建一個新的User對象
             User user = new User();
@@ -47,16 +48,30 @@ public class UserServicerTests {
 
         }
     }
+    //-----------------------------用戶登錄功能----------------------------
     @Test
-    public void login(){
+    public void login() {
         User user =
-                userService.login("test001","123");
+                userService.login("test001", "123");
         System.out.println(user);
     }
-
+    //-----------------------------用戶修改密碼----------------------------
     @Test
-    public void changePassword(){
-        userService.changePassword(8,"管理員","123","321");
+    public void changePassword() {
+        userService.changePassword(8, "管理員", "123", "321");
     }
-
+    //-------------------------根據用戶的id查詢用戶的資訊-----------------------------
+    @Test
+    public void getByUid() {
+        System.err.println(userService.getByUid(8));
+    }
+    //------------------------------更新用戶的資訊-------------------------------
+    @Test
+    public void changeInfo() {
+        User user = new User();
+        user.setPhone("3344556677");
+        user.setEmail("wowowww@gmail.com");
+        user.setGender(0);
+        userService.changeInfo(8,"Tom",user);
+    }
 }
