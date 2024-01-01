@@ -50,6 +50,12 @@ public class BaseController {
             // 設置JsonResult的消息為"註冊時產生未知的異常"
             result.setMessage("註冊時產生未知的異常");
         }
+        else if (e instanceof UpdateException) {
+            // 如果是，設置JsonResult的狀態碼為5000
+            result.setState(5001);
+            // 設置JsonResult的消息為"註冊時產生未知的異常"
+            result.setMessage("更新資料時產生未知的異常");
+        }
         return result;
     }
     /**

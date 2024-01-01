@@ -32,7 +32,7 @@ public class UserServicerTests {
             User user = new User();
             // 為User對象設置用戶名為'yuanxin01'
             // 為User對象設置密碼為'123'
-            user.setUsername("yuanxin02");
+            user.setUsername("test002");
             user.setPassword("123");
             // 調用userService的reg方法，傳入user對象進行註冊
             userService.reg(user);
@@ -52,6 +52,11 @@ public class UserServicerTests {
         User user =
                 userService.login("test001","123");
         System.out.println(user);
+    }
+
+    @Test
+    public void changePassword(){
+        userService.changePassword(8,"管理員","123","321");
     }
 
 }

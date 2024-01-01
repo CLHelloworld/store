@@ -17,10 +17,10 @@ public class LoginInterceptConfigurer implements WebMvcConfigurer {
         // 創建自定義攔截器物件
         HandlerInterceptor interceptor = new LoginInterceptor();
         //配置白名單 : 存放在List集合 所有靜態資源和不想被攔截的頁面(可讓非會員看到的頁面)
-        List<String> patterns = new ArrayList<>();
+        List<String> patterns = new ArrayList<String>();
         patterns.add("/bootstrap3/**");
         patterns.add("/css/**");
-        patterns.add("/image/**");
+        patterns.add("/images/**");
         patterns.add("/js/**");
         patterns.add("/web/register.html");
         patterns.add("/web/login.html");

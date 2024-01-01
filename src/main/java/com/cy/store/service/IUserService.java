@@ -2,11 +2,12 @@ package com.cy.store.service;
 
 import com.cy.store.entity.User;
 
-/** 會員模組的service層介面 */
+/** 用戶模組的service層介面 */
 public interface IUserService {
+
     /**
-     * 會員註冊
-     * @param user 會員資料物件
+     * 用戶註冊
+     * @param user 用戶資料物件
      *
      */
     void reg(User user);
@@ -22,4 +23,8 @@ public interface IUserService {
     // User返回值為,為了將數據保存在cookie或是session做一些其他的操作可以避免平凡操作資料庫獲取數據
     // 用戶名稱,id=>session,頭像=>cookie
     User login(String username,String password);
+
+    void changePassword(Integer uid,String username,
+                        String oldPassword,
+                        String newPassword);
 }
