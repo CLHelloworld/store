@@ -25,8 +25,8 @@ public class UserController extends BaseController {
     @Autowired
     private IUserService userService;
     //自定義檔案上傳路徑跟application配置檔有關係
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+//    @Value("${file.upload-dir}")
+//    private String uploadDir;
 
     // ===約定大於配置 : 開發思想來完成,省略大量的配置甚至註解的編寫===
 
@@ -169,12 +169,12 @@ public class UserController extends BaseController {
         if (!AVATAR_TYPE.contains(contentType)) {
             throw new FileTypeException("文件類型錯誤");
         }
-        //上傳的文件.../upload/文件.png
-//        String parent =
-//                session.getServletContext().
-//                        getRealPath("upload");
+//        上傳的文件.../upload/文件.png
+        String parent =
+                session.getServletContext().
+                        getRealPath("upload");
         //自定義的上傳路徑
-        String parent = uploadDir;
+//        String parent = uploadDir;
         //File對象指向這個路徑,File是否存在
         File dir = new File(parent);
         if (!dir.exists()) {//檢查目錄是否存在

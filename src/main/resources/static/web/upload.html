@@ -13,6 +13,7 @@
     <link href="../bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css">
     <script src="../bootstrap3/jquery-1.9.1.min.js"></script>
     <script src="../bootstrap3/js/bootstrap.js"></script>
+    <script src="../bootstrap3/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
     <!-- 字体图标 -->
     <link rel="stylesheet" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css"/>
     <link rel="stylesheet" type="text/css" href="../css/layout.css"/>
@@ -137,11 +138,9 @@
             </ul>
             <div class="panel-body">
                 <!--上传头像表单开始-->
-                <form action="/users/change_avatar"
-                      method="post"
+                <form id="form-change-avatar"
                       class="form-horizontal"
-                      role="form"
-                      enctype="multipart/form-data">
+                      role="form">
                     <div class="form-group">
                         <label class="col-md-2 control-label">选择头像:</label>
                         <div class="col-md-5">
@@ -154,7 +153,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <input type="submit" class="btn btn-primary" value="上传"/>
+                            <input id="btn-change-avatar" type="button" class="btn btn-primary" value="上传"/>
                         </div>
                     </div>
                 </form>
@@ -248,6 +247,44 @@
     </div>
 </footer>
 <!--页脚结束-->
-</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        let avatar = $.cookie("avatar");
+        //將cookie的值取出,放到頭像的src屬性
+        $("#img-avatar").attr("src", avatar)
+    })
 
+
+    $("#btn-change-avatar").click(function () {
+        // 發送AJAX請求
+        $.ajax({
+            url: "/users/change_avatar", // 設定請求的URL為用戶登錄的接口
+            type: "POST", // 設定請求類型為POST
+            // 使用FormData對象封裝form表單數據，這裡通過選取id為form-change-avatar的表單元素。
+            data: new FormData($("#form-change-avatar")[0]),
+            processData: false, // 禁止jQuery對數據的自動處理，因為data已經是FormData對象。
+            contentType: false, // 禁止jQuery自動設置Content-Type請求頭，因為使用FormData對象時，瀏覽器會自動設置。
+            dataType: "JSON", // 預期服務器返回的數據類型是JSON
+            success: function (json) {
+                console.log(json);
+                if (json.state == 200) {
+                    alert("頭像修改成功") // 顯示密碼修改成功的提示信息
+                    //將伺服器返回的圖片位址設置道img標籤的src屬性上
+                    //arrt(屬性,屬性值):給某個屬性設置某個值
+                    $("#img-avatar").attr("src", json.data);
+                    //將頭像保存在cookie
+                    $.cookie("avatar", json.data, {expires: 7});
+                } else {
+                    alert("頭像修改失敗") // 顯示密碼修改失敗的提示信息
+                }
+            },
+            error: function (xhr) {
+                // 當請求失敗時執行的函數，參數xhr是XMLHttpRequest對象
+                alert("修改頭像時發生異常" + xhr.message) // 顯示登錄時發生異常的提示信息
+            }
+        })
+    })
+
+</script>
+</body>
 </html>

@@ -156,6 +156,8 @@
                     alert("登錄成功") // 顯示登錄成功的提示信息
                     //跳轉到首頁index.html
                     location.href = "index.html" //使用相對路徑來確定跳轉的頁面
+                    //將返回json內的頭像放到cookie中
+                    $.cookie("avatar", json.data.avatar, {expires: 7});
                 } else {
                     alert("登錄失敗") // 顯示登錄失敗的提示信息
                 }

@@ -13,9 +13,11 @@ class StoreApplicationTests {
     @Autowired
     private DataSource dataSource;
 
+    //空的測試方法，用於確認Spring應用上下文正常加載。
     @Test
     void contextLoads() {
     }
+
     /**
      * 資料庫連接池
      * 1.DBCP
@@ -23,6 +25,7 @@ class StoreApplicationTests {
      * 3.Hikari(日語光)管理資料庫的連接對象
      * */
 
+    //測試從資料庫連接池獲取連接的功能。
     @Test
     void getConnection() throws Exception {
         System.out.println(dataSource.getConnection());
