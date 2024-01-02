@@ -102,6 +102,7 @@ public class UserServiceImpl implements IUserService {
     //-----------------------修改用戶密碼----------------------------
     @Override
     public void changePassword(Integer uid, String username, String oldPassword, String newPassword) {
+        //確認用戶是否存在
         // 調用userMapper的findByUid()方法，根據用戶的uid查詢用戶數據
         User result = userMapper.findByUid(uid);
         // 如果查詢結果為null或者用戶標記為已刪除，則拋出UserNotFoundException異常
@@ -128,6 +129,7 @@ public class UserServiceImpl implements IUserService {
     //---------------------根據用戶的id查詢用戶的資訊------------------------------
     @Override
     public User getByUid(Integer uid) {
+        //確認用戶是否存在
         // 調用 userMapper 的 findByUid 方法根據 uid 獲取用戶信息
         User result = userMapper.findByUid(uid);
         // 檢查獲取的用戶信息是否為 null 或者用戶標記為已刪除（isDelete 等於 1）
@@ -154,6 +156,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public void changeInfo(Integer uid, String username, User user) {
+        //確認用戶是否存在
         // 使用 userMapper 的 findByUid 方法根據 uid 查找用戶
         User result = userMapper.findByUid(uid);
         // 檢查獲取的用戶是否為 null 或者用戶是否被標記為已刪除（isDelete 等於 1）
@@ -177,7 +180,24 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
-//--------------------------------------------------------------------
+    //-----------------------更新用戶的頭像----------------------------
+    @Override
+    public void changeAvatat(Integer uid, String avatar, String username) {
+        //確認用戶是否存在
+        // 使用 userMapper 的 findByUid 方法根據 uid 查找用戶
+        User result = userMapper.findByUid(uid);
+        // 檢查獲取的用戶是否為 null 或者用戶是否被標記為已刪除（isDelete 等於 1）
+        if (result == null || result.getIsDelete() == 1) {
+            // 如果用戶不存在或已被標記為刪除，則拋出 UserNotFoundException 異常
+            throw new UserNotFoundException("用戶數據不存在");
+        }
+        Integer rows = userMapper.updateAvatarByUid(uid, avatar, username, new Date());
+        if (rows != 1) {
+            throw new UpdateException("更新用戶頭像時發生異常");
+        }
+    }
+
+    //--------------------------------------------------------------------
 
     /**
      * 定義一個mp5的加密處理

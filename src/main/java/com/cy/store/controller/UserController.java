@@ -6,8 +6,9 @@ import com.cy.store.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 
 @RestController //@Controller + @ResponseBody
@@ -76,7 +77,7 @@ public class UserController extends BaseController {
         return new JsonResult<>(OK, data);
     }
 
-    //------------------------------更新用戶的資訊-------------------------------
+    //----------------------------更新用戶的資訊-------------------------------
     @RequestMapping("change_info")
     public JsonResult<Void> changeInfo(User user,
                                        HttpSession session) {
@@ -88,5 +89,26 @@ public class UserController extends BaseController {
         return new JsonResult<>(OK);
     }
 
+    //---------------------------用戶頭像更新-------------------------------
+
+    /**
+     * MultipartFile介面是SpringMVC提供的一個介面,這個介面包裝了
+     * 獲取文件類型的數據(任何類型的file都可),SpringBoot整合了
+     * SpringMVC,只需要在處理請求的方法參數列表上聲明一個參數類型為MultipartFile
+     * SpringBoot自動將傳遞進來的文件賦值給這個參數
+     *
+     * 方法參數file對應到前端input標籤name屬性為file的按鈕
+     * 若前後端不同時可以用@RequestParam("表單內的name值")放在參數前指定對應
+     *
+     * @param session
+     * @param file
+     * @return
+     * */
+    @RequestMapping("change_avatar")
+    public JsonResult<String> changeAvatar(HttpSession session,
+                                           @RequestParam("file") MultipartFile file){
+
+        return null;
+    }
 }
 

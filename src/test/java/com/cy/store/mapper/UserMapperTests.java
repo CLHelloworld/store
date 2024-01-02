@@ -3,6 +3,7 @@ package com.cy.store.mapper;
 import com.cy.store.entity.User;
 import com.cy.store.service.ex.UpdateException;
 import com.cy.store.service.ex.UserNotFoundException;
+import org.apache.ibatis.annotations.Param;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,4 +70,14 @@ public class UserMapperTests {
         userMapper.updateInfoByUid(user);
     }
 
+    //----------------------測試更新用戶頭像----------------------------------
+    @Test
+    public void updateAvatarByUid() {
+        userMapper.updateAvatarByUid(
+                8,
+                "/upload/avatar.png",
+                "管理員",
+                new Date());
+
+    }
 }

@@ -2,10 +2,12 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!--namespace 設定當前映射文件和哪個街口進行映射,需要指定街口的文件路徑 -->
+<!--===========================VO層=================================-->
+<!--namespace 設定當前映射文件和哪個介面進行映射,需要指定介面的文件路徑 -->
 <mapper namespace="com.cy.store.mapper.UserMapper">
+
     <!-- 自定義映射規則 : resultMap標籤來完成映射規則的定義-->
-    <!-- id屬性 : 給這個映射分配為一個id值,定硬的就是resultMap="id屬性的值"屬性的取值
+    <!-- id屬性 : 給這個映射分配為一個id值,定義的就是resultMap="id屬性的值"屬性的取值
         type屬性 : 取值是一個類,表示資料庫中查詢結果與Java中哪個實體類進行映射
     -->
     <resultMap id="UserEntityMap" type="com.cy.store.entity.User">
@@ -22,7 +24,7 @@
         <result column="modified_user" property="modifiedUser"/>
         <result column="modified_time" property="modifiedTime"/>
     </resultMap>
-
+    <!--===========================================================-->
     <!-- id屬性:映射接口中方法的名稱,直接在標籤的內容來寫sql語法 -->
     <!--
     useGeneratedKeys屬性 : 表示開啟某個變數的值遞增(主鍵設置為遞增)
@@ -34,8 +36,10 @@
         VALUES (#{username}, #{password}, #{salt}, #{phone}, #{email}, #{gender}, #{avatar}, #{isDelete},
                 #{createdUser}, #{createdTime}, #{modifiedUser}, #{modifiedTime})
     </insert>
-    <!-- select語句在執行時,查詢結果是一個對象,多個對象 -->
-    <!--
+
+    <!--============================================================-->
+    <!-- select語句在執行時,查詢結果是一個對象,多個對象
+
         resultType : 表示查詢的結果為集合,只需要指定對應映射的類型,並且包含完整的包接口; resultType="com.cy.store.entity.User"
         resultMap :  標籤當資料庫表格的資源和VO不同時,來自定義查詢結果的映射規則
     -->
@@ -45,6 +49,8 @@
         WHERE username = #{username}
     </select>
 
+    <!--===========================================================-->
+
     <update id="updatePasswordByUid">
         UPDATE t_user
         SET password=#{password}
@@ -53,24 +59,39 @@
         WHERE uid = ${uid}
     </update>
 
+    <!--===========================================================-->
+
     <select id="findByUid" resultMap="UserEntityMap">
         SELECT *
         FROM t_user
         WHERE uid = #{uid}
     </select>
 
+    <!--===========================================================-->
+
     <update id="updateInfoByUid">
         UPDATE t_user
         SET
-            <!-- if表示條件標籤,test接收的是返回值為boolean的條件
-                 若test的條件為true則執行if標籤內部的語句反之則不執行-->
+        <!-- if表示條件標籤,test接收的是返回值為boolean的條件
+             若test的條件為true則執行if標籤內部的語句反之則不執行-->
         <if test="phone != null">phone = #{phone},</if><!--結束標籤要放在逗號之後-->
         <if test="email != null">email = #{email},</if>
         <if test="gender != null">gender = #{gender},</if>
         modified_user=#{modifiedUser},
         modified_time=#{modifiedTime}
         WHERE uid = #{uid}
-
     </update>
+
+    <!--===========================================================-->
+
+    <update id="updateAvatarByUid">
+        UPDATE t_user
+        SET avatar=#{avatar},
+            modified_user=#{modifiedUser},
+            modified_time=#{modifiedTime}
+        WHERE uid = #{uid}
+    </update>
+
+    <!--===========================================================-->
 
 </mapper>

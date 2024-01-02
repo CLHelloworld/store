@@ -1,6 +1,7 @@
 package com.cy.store.mapper;
 
 import com.cy.store.entity.User;
+import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.annotation.MapperScan;
 
 import java.util.Date;
@@ -31,6 +32,7 @@ public interface UserMapper {
     User findByUsername(String username);
 
     //-----------------------修改用戶密碼----------------------------
+
     /**
      * 根據用戶的uid來修改用戶密碼
      *
@@ -45,7 +47,8 @@ public interface UserMapper {
                                 String modifiedUser,
                                 Date modifiedTime);
 
-    //---------------------根據用戶的id查詢用戶的資訊------------------------
+    //---------------------根據用戶的id查詢用戶的資訊--------------------
+
     /**
      * 根據用戶的id來查詢用戶數據
      *
@@ -54,7 +57,8 @@ public interface UserMapper {
      */
     User findByUid(Integer uid);
 
-    //-----------------------更新用戶的資訊--------------------------
+    //-----------------------更新用戶的資訊---------------------------
+
     /**
      * 更新用戶的數據
      *
@@ -62,4 +66,26 @@ public interface UserMapper {
      * @return 返回值為受影響的欄位
      */
     Integer updateInfoByUid(User user);
+
+    //-----------------------修改用戶的頭像-----------------------------
+
+    /**
+     * 根據用戶的uid來修改用戶的頭像
+     * *@Param("SQL映射文件(XML)中 #{} 的變數名")
+     * 當SQL裡的#{}映射的介面方法參數名不同時,需要將某個參數指定到#{}時可使用
+     * 可以使用@param來標註映射的關係
+     * @param uid
+     * @param avatar
+     * @param modifiedUser
+     * @param modifiedTime
+     * @return
+     */
+    Integer updateAvatarByUid(@Param("uid") Integer uid,
+                              @Param("avatar") String avatar,
+                              @Param("modifiedUser") String modifiedUser,
+                              @Param("modifiedTime") Date modifiedTime
+                              );
+
+
+
 }

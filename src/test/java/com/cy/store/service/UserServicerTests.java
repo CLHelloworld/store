@@ -74,4 +74,9 @@ public class UserServicerTests {
         user.setGender(0);
         userService.changeInfo(8,"Tom",user);
     }
+    //------------------------------更新用戶的頭像--------------------------
+    @Test
+    public void changeAvatar(){
+        userService.changeAvatat(8,"/upload/test.png","小明");
+    }
 }
