@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--===========================VO層=================================-->
+<!--namespace 設定當前映射文件和哪個介面進行映射,需要指定介面的文件路徑 -->
+<mapper namespace="com.cy.store.mapper.DistrictMapper">
+    <!-- 可參考UserMapper.xml -->
+
+    <select id="findByParent" resultType="com.cy.store.entity.District">
+        <!-- resultType="java.lang.Integer為定義查詢到的結果 -->
+        SELECT *
+        FROM t_dict_district
+        WHERE parent = #{parent}
+        ORDER BY code ASC
+    </select>
+
+    <select id="findNameByCode" resultType="java.lang.String">
+        SELECT name
+        FROM t_dict_district
+        WHERE code = #{code}
+    </select>
+
+</mapper>

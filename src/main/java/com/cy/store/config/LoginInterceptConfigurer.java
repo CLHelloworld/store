@@ -9,7 +9,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Controller攔截器的註冊 */
+/**
+ * Controller攔截器的註冊
+ */
 @Configuration //加載當前的攔截器進行註冊
 public class LoginInterceptConfigurer implements WebMvcConfigurer {
     @Override
@@ -28,6 +30,7 @@ public class LoginInterceptConfigurer implements WebMvcConfigurer {
         patterns.add("/web/product.html");
         patterns.add("/users/reg");
         patterns.add("/users/login");
+        patterns.add("/district/**");
         /** 用於配置攔截器 */
 
         // 完成攔截器的註冊

@@ -2,12 +2,11 @@ package com.cy.store.mapper;
 
 import com.cy.store.entity.User;
 import org.apache.ibatis.annotations.Param;
-import org.mybatis.spring.annotation.MapperScan;
 
 import java.util.Date;
 
 /**
- * 處理用戶數據操作區塊的mapper(Dao)介面
+ * 使用者Entity的介面
  */
 public interface UserMapper {
 

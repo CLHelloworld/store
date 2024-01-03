@@ -34,6 +34,9 @@ public class BaseController {
         } else if (e instanceof PasswordNotMatchException) {
             result.setState(4002);
             result.setMessage("密碼錯誤");
+        } else if (e instanceof AddressCountLimitException) {
+            result.setState(4003);
+            result.setMessage("收貨地址數量超出上限");
         } else if (e instanceof InsertException) {
             result.setState(5000);
             result.setMessage("註冊時產生未知的異常");

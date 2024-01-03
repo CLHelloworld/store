@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--===========================VO層=================================-->
+<!--namespace 設定當前映射文件和哪個介面進行映射,需要指定介面的文件路徑 -->
+<mapper namespace="com.cy.store.mapper.AddressMapper">
+    <!-- 可參考UserMapper.xml -->
+    <resultMap id="AddressEntityMap" type="com.cy.store.entity.Address">
+        <id column="aid" property="aid"/>
+        <result column="province_code" property="provinceCode"/>
+        <result column="province_name" property="provinceName"/>
+        <result column="city_code" property="cityCode"/>
+        <result column="city_name" property="cityName"/>
+        <result column="area_code" property="areaCode"/>
+        <result column="area_name" property="areaName"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_user" property="modifiedUser"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="aid" >
+
+        INSERT INTO t_address (uid, name, province_name, province_code, city_name, city_code, area_name, area_code, zip,
+                               address, phone, tel, tag, is_default, created_user, created_time, modified_user,
+
+                             modified_time)
+        VALUES (#{uid}, #{name}, #{provinceName}, #{provinceCode}, #{cityName}, #{cityCode}, #{areaName},
+                #{areaCode}, #{zip}, #{address}, #{phone}, #{tel}, #{tag}, #{isDefault}, #{createdUser},
+                #{createdTime}, #{modifiedUser}, #{modifiedTime})
+    </insert>
+
+    <select id="countByUid" resultType="java.lang.Integer">
+       <!-- resultType="java.lang.Integer為定義查詢到的結果 -->
+        SELECT COUNT(*)
+        FROM t_address
+        WHERE uid = #{uid}
+
+    </select>
+
+</mapper>
